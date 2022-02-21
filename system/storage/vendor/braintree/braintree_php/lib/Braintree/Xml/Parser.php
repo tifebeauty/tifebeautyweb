@@ -1,17 +1,11 @@
 <?php
-namespace Braintree\Xml;
-
-use DateTime;
-use DateTimeZone;
-use DOMDocument;
-use DOMElement;
-use DOMText;
-use Braintree\Util;
 
 /**
  * Braintree XML Parser
+ *
+ * @copyright  2014 Braintree, a division of PayPal, Inc.
  */
-class Parser
+class Braintree_Xml_Parser
 {
     /**
      * Converts an XML string into a multidimensional array
@@ -26,9 +20,9 @@ class Parser
 
         $root = $document->documentElement->nodeName;
 
-        return Util::delimiterToCamelCaseArray([
+        return Braintree_Util::delimiterToCamelCaseArray(array(
             $root => self::_nodeToValue($document->childNodes->item(0)),
-        ]);
+        ));
     }
 
     /**
@@ -46,7 +40,7 @@ class Parser
 
         switch($type) {
         case 'array':
-            $array = [];
+            $array = array();
             foreach ($node->childNodes as $child) {
                 $value = self::_nodeToValue($child);
                 if ($value !== null) {
@@ -55,19 +49,19 @@ class Parser
             }
             return $array;
         case 'collection':
-            $collection = [];
+            $collection = array();
             foreach ($node->childNodes as $child) {
                 $value = self::_nodetoValue($child);
                 if ($value !== null) {
                     if (!isset($collection[$child->nodeName])) {
-                        $collection[$child->nodeName] = [];
+                        $collection[$child->nodeName] = array();
                     }
                     $collection[$child->nodeName][] = self::_nodeToValue($child);
                 }
             }
             return $collection;
         default:
-            $values = [];
+            $values = array();
             if ($node->childNodes->length === 1 && $node->childNodes->item(0) instanceof DOMText) {
                 return $node->childNodes->item(0)->nodeValue;
             } else {
@@ -137,4 +131,3 @@ class Parser
         return $dateTime;
     }
 }
-class_alias('Braintree\Xml\Parser', 'Braintree_Xml_Parser');

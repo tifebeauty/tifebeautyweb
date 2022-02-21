@@ -6,7 +6,7 @@
     "authors": [
         {
             "name": "Braintree",
-            "homepage": "https://www.braintreepayments.com"
+            "homepage": "http://www.braintreepayments.com"
         }
     ],
     "require": {
@@ -22,15 +22,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Braintree": "lib/"
-        },
-        "psr-4": {
-            "Braintree\\": "lib/Braintree"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Test\\": "tests"
+            "Braintree": "lib"
         }
     }
 }

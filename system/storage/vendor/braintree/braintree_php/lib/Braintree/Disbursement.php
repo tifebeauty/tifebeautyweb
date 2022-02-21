@@ -1,12 +1,6 @@
 <?php
-namespace Braintree;
-
-class Disbursement extends Base
+final class Braintree_Disbursement extends Braintree_Base
 {
-
-    const TYPE_CREDIT = "credit";
-    const TYPE_DEBIT  = "debit";
-
     private $_merchantAccount;
 
     protected function _initialize($disbursementAttribs)
@@ -16,16 +10,16 @@ class Disbursement extends Base
 
         if (isset($disbursementAttribs['merchantAccount'])) {
             $this->_set('merchantAccount',
-                MerchantAccount::factory($disbursementAttribs['merchantAccount'])
+                Braintree_MerchantAccount::factory($disbursementAttribs['merchantAccount'])
             );
         }
     }
 
     public function transactions()
     {
-        $collection = Transaction::search([
-            TransactionSearch::ids()->in($this->transactionIds),
-        ]);
+        $collection = Braintree_Transaction::search(array(
+            Braintree_TransactionSearch::ids()->in($this->transactionIds)
+        ));
 
         return $collection;
     }
@@ -39,28 +33,17 @@ class Disbursement extends Base
 
     public function  __toString()
     {
-        $display = [
+        $display = array(
             'id', 'merchantAccountDetails', 'exceptionMessage', 'amount',
             'disbursementDate', 'followUpAction', 'retry', 'success',
-            'transactionIds', 'disbursementType'
-            ];
+            'transactionIds'
+            );
 
-        $displayAttributes = [];
+        $displayAttributes = array();
         foreach ($display AS $attrib) {
             $displayAttributes[$attrib] = $this->$attrib;
         }
         return __CLASS__ . '[' .
-                Util::attributesToString($displayAttributes) .']';
-    }
-
-    public function isDebit()
-    {
-        return $this->disbursementType == Disbursement::TYPE_DEBIT;
-    }
-
-    public function isCredit()
-    {
-        return $this->disbursementType == Disbursement::TYPE_CREDIT;
+                Braintree_Util::attributesToString($displayAttributes) .']';
     }
 }
-class_alias('Braintree\Disbursement', 'Braintree_Disbursement');

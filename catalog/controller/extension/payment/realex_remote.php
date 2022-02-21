@@ -86,10 +86,6 @@ class ControllerExtensionPaymentRealexRemote extends Controller {
 			die();
 		}
 
-		if(!isset($this->session->data['order_id'])) {
-			return false;
-		}
-
 		$order_id = $this->session->data['order_id'];
 
 		$order_ref = $order_id . 'T' . strftime("%Y%m%d%H%M%S") . mt_rand(1, 999);

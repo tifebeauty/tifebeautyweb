@@ -19,5 +19,3 @@ $_['entry_date_added']  = 'Date Added';
 
 // Error
 $_['error_permission']  = 'Warning: You do not have permission to modify uploads!';
-$_['error_upload']      = 'Invalid upload!';
-$_['error_file']        = 'Upload file is not found!';

@@ -198,7 +198,7 @@ class WechatUser extends Common
 
     /**
      * 删除粉丝分组
-     * @param string $id
+     * @param type $id
      * @return bool
      */
     public function delGroup($id)

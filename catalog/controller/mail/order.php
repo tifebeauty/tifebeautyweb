@@ -463,7 +463,6 @@ class ControllerMailOrder extends Controller {
 			$emails = explode(',', $this->config->get('config_mail_alert_email'));
 
 			foreach ($emails as $email) {
-				$email = trim($email);
 				if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
 					$mail->setTo($email);
 					$mail->send();

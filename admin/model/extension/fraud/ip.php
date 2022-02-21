@@ -11,7 +11,7 @@ class ModelExtensionFraudIp extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "fraud_ip`");
+		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ip`");
 	}
 
     public function addIp($ip) {

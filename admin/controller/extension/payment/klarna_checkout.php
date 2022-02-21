@@ -307,7 +307,7 @@ class ControllerExtensionPaymentKlarnaCheckout extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 		
-		$data['order_id'] = (int)$this->request->get['order_id'];
+		$data['order_id'] = $this->request->get['order_id'];
 
 		return $this->load->view('extension/payment/klarna_checkout_order', $data);
 	}
@@ -346,7 +346,7 @@ class ControllerExtensionPaymentKlarnaCheckout extends Controller {
 		
 		$data['user_token'] = $this->session->data['user_token'];
 		
-		$data['order_id'] = (int)$this->request->get['order_id'];
+		$data['order_id'] = $this->request->get['order_id'];
 		
 		$data['store_url'] = $this->request->server['HTTPS'] ? HTTPS_CATALOG : HTTP_CATALOG;
 
@@ -810,7 +810,7 @@ class ControllerExtensionPaymentKlarnaCheckout extends Controller {
 		$this->load->model('extension/payment/klarna_checkout');
 		$this->load->model('localisation/geo_zone');
 
-		if (version_compare(phpversion(), '7.3', '<')) {
+		if (version_compare(phpversion(), '5.4.0', '<')) {
 			$this->error['warning'] = $this->language->get('error_php_version');
 		}
 

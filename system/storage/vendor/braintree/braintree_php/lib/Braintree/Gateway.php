@@ -1,278 +1,186 @@
 <?php
-namespace Braintree;
-
 /**
  * Braintree Gateway module
  *
  * @package    Braintree
  * @category   Resources
+ * @copyright  2014 Braintree, a division of PayPal, Inc.
  */
-class Gateway
+class Braintree_Gateway
 {
     /**
      *
-     * @var Configuration
+     * @var Braintree_Configuration
      */
     public $config;
 
     public function __construct($config)
     {
         if (is_array($config)) {
-            $config = new Configuration($config);
+            $config = new Braintree_Configuration($config);
         }
         $this->config = $config;
     }
 
     /**
-     *
-     * @return AddOnGateway
+     * 
+     * @return \Braintree_AddOnGateway
      */
     public function addOn()
     {
-        return new AddOnGateway($this);
+        return new Braintree_AddOnGateway($this);
     }
 
     /**
-     *
-     * @return AddressGateway
+     * 
+     * @return \Braintree_AddressGateway
      */
     public function address()
     {
-        return new AddressGateway($this);
+        return new Braintree_AddressGateway($this);
     }
 
     /**
-     *
-     * @return ApplePayGateway
-     */
-    public function applePay()
-    {
-        return new ApplePayGateway($this);
-    }
-
-    /**
-     *
-     * @return ClientTokenGateway
+     * 
+     * @return \Braintree_ClientTokenGateway
      */
     public function clientToken()
     {
-        return new ClientTokenGateway($this);
+        return new Braintree_ClientTokenGateway($this);
     }
 
     /**
-     *
-     * @return CreditCardGateway
+     * 
+     * @return \Braintree_CreditCardGateway
      */
     public function creditCard()
     {
-        return new CreditCardGateway($this);
+        return new Braintree_CreditCardGateway($this);
     }
 
     /**
-     *
-     * @return CreditCardVerificationGateway
+     * 
+     * @return \Braintree_CreditCardVerificationGateway
      */
     public function creditCardVerification()
     {
-        return new CreditCardVerificationGateway($this);
+        return new Braintree_CreditCardVerificationGateway($this);
     }
 
     /**
-     *
-     * @return CustomerGateway
+     * 
+     * @return \Braintree_CustomerGateway
      */
     public function customer()
     {
-        return new CustomerGateway($this);
+        return new Braintree_CustomerGateway($this);
     }
 
     /**
-     *
-     * @return DiscountGateway
+     * 
+     * @return \Braintree_DiscountGateway
      */
     public function discount()
     {
-        return new DiscountGateway($this);
+        return new Braintree_DiscountGateway($this);
     }
 
     /**
-     *
-     * @return DisputeGateway
-     */
-    public function dispute()
-    {
-        return new DisputeGateway($this);
-    }
-
-    /**
-     *
-     * @return DocumentUploadGateway
-     */
-    public function documentUpload()
-    {
-        return new DocumentUploadGateway($this);
-    }
-
-    /**
-     *
-     * @return MerchantGateway
+     * 
+     * @return \Braintree_MerchantGateway
      */
     public function merchant()
     {
-        return new MerchantGateway($this);
+        return new Braintree_MerchantGateway($this);
     }
 
     /**
-     *
-     * @return MerchantAccountGateway
+     * 
+     * @return \Braintree_MerchantAccountGateway
      */
     public function merchantAccount()
     {
-        return new MerchantAccountGateway($this);
+        return new Braintree_MerchantAccountGateway($this);
     }
 
     /**
-     *
-     * @return OAuthGateway
+     * 
+     * @return \Braintree_OAuthGateway
      */
     public function oauth()
     {
-        return new OAuthGateway($this);
+        return new Braintree_OAuthGateway($this);
     }
 
     /**
-     *
-     * @return PaymentMethodGateway
+     * 
+     * @return \Braintree_PaymentMethodGateway
      */
     public function paymentMethod()
     {
-        return new PaymentMethodGateway($this);
+        return new Braintree_PaymentMethodGateway($this);
     }
 
     /**
-     *
-     * @return PaymentMethodNonceGateway
+     * 
+     * @return \Braintree_PaymentMethodNonceGateway
      */
     public function paymentMethodNonce()
     {
-        return new PaymentMethodNonceGateway($this);
+        return new Braintree_PaymentMethodNonceGateway($this);
     }
 
     /**
-     *
-     * @return PayPalAccountGateway
+     * 
+     * @return \Braintree_PayPalAccountGateway
      */
     public function payPalAccount()
     {
-        return new PayPalAccountGateway($this);
+        return new Braintree_PayPalAccountGateway($this);
     }
 
     /**
-     *
-     * @return PlanGateway
+     * 
+     * @return \Braintree_PlanGateway
      */
     public function plan()
     {
-        return new PlanGateway($this);
+        return new Braintree_PlanGateway($this);
     }
 
     /**
-     *
-     * @return SettlementBatchSummaryGateway
+     * 
+     * @return \Braintree_SettlementBatchSummaryGateway
      */
     public function settlementBatchSummary()
     {
-        return new SettlementBatchSummaryGateway($this);
+        return new Braintree_SettlementBatchSummaryGateway($this);
     }
 
     /**
-     *
-     * @return SubscriptionGateway
+     * 
+     * @return \Braintree_SubscriptionGateway
      */
     public function subscription()
     {
-        return new SubscriptionGateway($this);
+        return new Braintree_SubscriptionGateway($this);
     }
 
     /**
-     *
-     * @return TestingGateway
-     */
-    public function testing()
-    {
-        return new TestingGateway($this);
-    }
-
-    /**
-     *
-     * @return TransactionGateway
+     * 
+     * @return \Braintree_TransactionGateway
      */
     public function transaction()
     {
-        return new TransactionGateway($this);
+        return new Braintree_TransactionGateway($this);
     }
 
     /**
-     *
-     * @return TransactionLineItemGateway
-     */
-    public function transactionLineItem()
-    {
-        return new TransactionLineItemGateway($this);
-    }
-
-    /**
-     *
-     * @return TransparentRedirectGateway
+     * 
+     * @return \Braintree_TransparentRedirectGateway
      */
     public function transparentRedirect()
     {
-        return new TransparentRedirectGateway($this);
-    }
-
-    /**
-     *
-     * @return UsBankAccountGateway
-     */
-    public function usBankAccount()
-    {
-        return new UsBankAccountGateway($this);
-    }
-
-    /**
-     *
-     * @return UsBankAccountVerificationGateway
-     */
-    public function usBankAccountVerification()
-    {
-        return new UsBankAccountVerificationGateway($this);
-    }
-
-    /**
-     *
-     * @return IdealPaymentGateway
-     */
-    public function idealPayment()
-    {
-        return new IdealPaymentGateway($this);
-    }
-
-    /**
-     *
-     * @return WebhookNotificationGateway
-     */
-    public function webhookNotification()
-    {
-        return new WebhookNotificationGateway($this);
-    }
-
-    /**
-     *
-     * @return WebhookTestingGateway
-     */
-    public function webhookTesting()
-    {
-        return new WebhookTestingGateway($this);
+        return new Braintree_TransparentRedirectGateway($this);
     }
 }
-class_alias('Braintree\Gateway', 'Braintree_Gateway');

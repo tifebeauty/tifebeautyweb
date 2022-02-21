@@ -1,29 +1,24 @@
 <?php
-namespace Test\Unit;
+require_once __DIR__ . '/../TestHelper.php';
 
-require_once dirname(__DIR__) . '/Setup.php';
-
-use Test\Setup;
-use Braintree;
-
-class OAuthTest extends Setup
+class Braintree_OAuthTest extends PHPUnit_Framework_TestCase
 {
     protected $gateway;
 
     public function setUp()
     {
-        $this->gateway = new Braintree\Gateway([
+        $this->gateway = new Braintree_Gateway(array(
             'clientId' => 'client_id$development$integration_client_id',
             'clientSecret' => 'client_secret$development$integration_client_secret'
-        ]);
+        ));
     }
 
     public function testMapInvalidGrantCodeToOldError()
     {
-        $result = $this->_buildResult([
+        $result = $this->_buildResult(array(
             'code' => '93801',
             'message' => 'Invalid grant: code not found'
-        ]);
+        ));
 
         $this->gateway->oauth()->_mapError($result);
 
@@ -33,10 +28,10 @@ class OAuthTest extends Setup
 
     public function testMapInvalidCredentialsCodeToOldError()
     {
-        $result = $this->_buildResult([
+        $result = $this->_buildResult(array(
             'code' => '93802',
             'message' => 'Invalid credentials: wrong client id or secret'
-        ]);
+        ));
 
         $this->gateway->oauth()->_mapError($result);
 
@@ -46,10 +41,10 @@ class OAuthTest extends Setup
 
     public function testMapInvalidScopeCodeToOldError()
     {
-        $result = $this->_buildResult([
+        $result = $this->_buildResult(array(
             'code' => '93803',
             'message' => 'Invalid scope: scope is invalid'
-        ]);
+        ));
 
         $this->gateway->oauth()->_mapError($result);
 
@@ -59,13 +54,13 @@ class OAuthTest extends Setup
 
     protected function _buildResult($error)
     {
-        return new Braintree\Result\Error([
-            'errors' => [
-                'errors' => [],
-                'credentials' => [
-                    'errors' => [$error]
-                ]
-            ]
-        ]);
+        return new Braintree_Result_Error(array(
+            'errors' => array(
+                'errors' => array(),
+                'credentials' => array(
+                    'errors' => array($error)
+                )
+            )
+        ));
     }
 }

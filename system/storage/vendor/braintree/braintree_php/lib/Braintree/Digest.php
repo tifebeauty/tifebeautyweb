@@ -1,11 +1,11 @@
 <?php
-namespace Braintree;
-
 /**
  * Digest encryption module
  * Digest creates an HMAC-SHA1 hash for encrypting messages
+ *
+ * @copyright  2014 Braintree, a division of PayPal, Inc.
  */
-class Digest
+class Braintree_Digest
 {
     public static function hexDigestSha1($key, $string)
     {
@@ -57,4 +57,3 @@ class Digest
         return sha1($outerPad.pack($pack, sha1($innerPad.$message)));
     }
 }
-class_alias('Braintree\Digest', 'Braintree_Digest');

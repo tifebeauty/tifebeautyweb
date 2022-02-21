@@ -426,7 +426,11 @@ class ModelExtensionShippingECShip extends Model {
 				$error = $this->language->get('text_unavailable');
 			}
 
- 			$url = 'https://service.hongkongpost.hk/API-trial/services/Calculator?wsdl'; 
+			if (!$this->config->get('shipping_ec_ship_test')) {
+				$url = 'https://www.ec-ship.hk/API/services/Calculator?wsdl';
+			} else {
+				$url = 'http://www.ec-ship.hk/API-trial/services/Calculator?wsdl';
+			}
 
 			// Creating date using yyyy-mm-ddThh:mm:ssZ format
 			$tm_created = gmdate('Y-m-d\TH:i:s\Z');

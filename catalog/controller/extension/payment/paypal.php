@@ -1,13 +1,13 @@
 <?php
 class ControllerExtensionPaymentPayPal extends Controller {
 	private $error = array();
-		
+	
 	public function __construct($registry) {
 		parent::__construct($registry);
 
 		if (version_compare(phpversion(), '7.1', '>=')) {
-			ini_set('precision', 14);
-			ini_set('serialize_precision', 14);
+			ini_set('precision', 17);
+			ini_set('serialize_precision', -1);
 		}
 	}
 	
@@ -16,7 +16,6 @@ class ControllerExtensionPaymentPayPal extends Controller {
 		
 		$this->load->model('extension/payment/paypal');
 		$this->load->model('localisation/country');
-		$this->load->model('checkout/order');
 				
 		$country = $this->model_localisation_country->getCountry($this->config->get('config_country_id'));
 				
@@ -36,49 +35,23 @@ class ControllerExtensionPaymentPayPal extends Controller {
 		$data['transaction_method'] = $this->config->get('payment_paypal_transaction_method');
 		$data['locale'] = preg_replace('/-(.+?)+/', '', $this->config->get('config_language')) . '_' . $country['iso_code_2'];
 		$data['currency_code'] = $this->config->get('payment_paypal_currency_code');
-		$data['currency_value'] = $this->config->get('payment_paypal_currency_value');
-		$data['decimal_place'] = $setting['currency'][$data['currency_code']]['decimal_place'];
 		
-		$data['express_status'] = $setting['checkout']['express']['status'];
-
-		if (!$setting['currency'][$data['currency_code']]['express_status']) {
-			$data['express_status'] = $setting['currency'][$data['currency_code']]['express_status'];
-		}
-		
+		$data['express_status'] = $setting['checkout']['express']['status'];		
 		$data['button_align'] = $setting['checkout']['express']['button_align'];
 		$data['button_size'] = $setting['checkout']['express']['button_size'];
 		$data['button_color'] = $setting['checkout']['express']['button_color'];
 		$data['button_shape'] = $setting['checkout']['express']['button_shape'];
 		$data['button_label'] = $setting['checkout']['express']['button_label'];
+
 		$data['button_width'] = $setting['button_width'][$data['button_size']];
 						
 		$data['card_status'] = $setting['checkout']['card']['status'];
-		
-		if (!$setting['currency'][$data['currency_code']]['card_status']) {
-			$data['card_status'] = $setting['currency'][$data['currency_code']]['card_status'];
-		}
-		
 		$data['form_align'] = $setting['checkout']['card']['form_align'];
 		$data['form_size'] = $setting['checkout']['card']['form_size'];
 		$data['form_width'] = $setting['form_width'][$data['form_size']];
 		$data['secure_status'] = $setting['checkout']['card']['secure_status'];
-		
-		$data['message_status'] = $setting['checkout']['message']['status'];
-		$data['message_align'] = $setting['checkout']['message']['message_align'];
-		$data['message_size'] = $setting['checkout']['message']['message_size'];
-		$data['message_width'] = $setting['message_width'][$data['message_size']];
-		$data['message_layout'] = $setting['checkout']['message']['message_layout'];
-		$data['message_text_color'] = $setting['checkout']['message']['message_text_color'];
-		$data['message_text_size'] = $setting['checkout']['message']['message_text_size'];
-		$data['message_flex_color'] = $setting['checkout']['message']['message_flex_color'];
-		$data['message_flex_ratio'] = $setting['checkout']['message']['message_flex_ratio'];
-		$data['message_placement'] = 'payment';
 				
 		$data['order_id'] = $this->session->data['order_id'];
-		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-		
-		$data['message_amount'] = number_format($order_info['total'] * $data['currency_value'], $data['decimal_place'], '.', '');
 										
 		require_once DIR_SYSTEM .'library/paypal/paypal.php';
 		
@@ -108,13 +81,9 @@ class ControllerExtensionPaymentPayPal extends Controller {
 				if (isset($error['name']) && ($error['name'] == 'CURLE_OPERATION_TIMEOUTED')) {
 					$error['message'] = $this->language->get('error_timeout');
 				}
-				
-				if (isset($error['details'][0]['description'])) {
-					$error_messages[] = $error['details'][0]['description'];
-				} else {
-					$error_messages[] = $error['message'];
-				}
-									
+					
+				$error_messages[] = $error['message'];
+					
 				$this->model_extension_payment_paypal->log($error, $error['message']);
 			}
 				
@@ -148,7 +117,6 @@ class ControllerExtensionPaymentPayPal extends Controller {
 		$transaction_method = $this->config->get('payment_paypal_transaction_method');
 		$currency_code = $this->config->get('payment_paypal_currency_code');
 		$currency_value = $this->config->get('payment_paypal_currency_value');
-		$decimal_place = $setting['currency'][$currency_code]['decimal_place'];
 		
 		require_once DIR_SYSTEM . 'library/paypal/paypal.php';
 		
@@ -198,7 +166,7 @@ class ControllerExtensionPaymentPayPal extends Controller {
 		$item_total = 0;
 				
 		foreach ($this->cart->getProducts() as $product) {
-			$product_price = number_format($product['price'] * $currency_value, $decimal_place, '.', '');
+			$product_price = $this->currency->format($product['price'], $currency_code, $currency_value, false);
 				
 			$item_info[] = array(
 				'name' => $product['name'],
@@ -214,23 +182,21 @@ class ControllerExtensionPaymentPayPal extends Controller {
 			$item_total += $product_price * $product['quantity'];
 		}
 				
-		$item_total = number_format($item_total, $decimal_place, '.', '');
-		$sub_total = $this->cart->getSubTotal();
-		$total = $this->cart->getTotal();
-		$tax_total = number_format(($total - $sub_total) * $currency_value, $decimal_place, '.', '');
-					
+		$sub_total = $this->currency->format($this->cart->getSubTotal(), $currency_code, $currency_value, false);
+		$total = $this->currency->format($this->cart->getTotal(), $currency_code, $currency_value, false);
+		$tax_total = $total - $sub_total;
+						
 		$discount_total = 0;
 		$handling_total = 0;
 		$shipping_total = 0;
 		
 		if (isset($this->session->data['shipping_method'])) {
-			$shipping_total = $this->tax->calculate($this->session->data['shipping_method']['cost'], $this->session->data['shipping_method']['tax_class_id'], $this->config->get('config_tax'));
-			$shipping_total = number_format($shipping_total * $currency_value, $decimal_place, '.', '');
+			$shipping_total = $this->currency->format($this->tax->calculate($this->session->data['shipping_method']['cost'], $this->session->data['shipping_method']['tax_class_id'], $this->config->get('config_tax')), $currency_code, $currency_value, false);
 		}
 		
-		$order_total = number_format($order_info['total'] * $currency_value, $decimal_place, '.', '');
+		$order_total = $this->currency->format($order_info['total'], $currency_code, $currency_value, false);
 		
-		$rebate = number_format($item_total + $tax_total + $shipping_total - $order_total, $decimal_place, '.', '');
+		$rebate = $item_total + $tax_total + $shipping_total - $order_total;
 		
 		if ($rebate > 0) {
 			$discount_total = $rebate;
@@ -265,40 +231,22 @@ class ControllerExtensionPaymentPayPal extends Controller {
 			)
 		);
 	
-		if ($this->cart->hasShipping()) {
-			$order_info = array(
-				'intent' => strtoupper($transaction_method),
-				'purchase_units' => array(
-					array(
-						'reference_id' => 'default',
-						'description' => 'Your order ' . $order_info['order_id'],
-						'invoice_id' => $order_info['order_id'],
-						'shipping' => $shipping_info,
-						'items' => $item_info,
-						'amount' => $amount_info
-					)
-				),
-				'application_context' => array(
-					'shipping_preference' => $shipping_preference
+		$order_info = array(
+			'intent' => strtoupper($transaction_method),
+			'purchase_units' => array(
+				array(
+					'reference_id' => 'default',
+					'description' => 'Your order ' . $order_info['order_id'],
+					'invoice_id' => $order_info['order_id'],
+					'shipping' => $shipping_info,
+					'items' => $item_info,
+					'amount' => $amount_info
 				)
-			);
-		} else {
-			$order_info = array(
-				'intent' => strtoupper($transaction_method),
-				'purchase_units' => array(
-					array(
-						'reference_id' => 'default',
-						'description' => 'Your order ' . $order_info['order_id'],
-						'invoice_id' => $order_info['order_id'],
-						'items' => $item_info,
-						'amount' => $amount_info
-					)
-				),
-				'application_context' => array(
-					'shipping_preference' => $shipping_preference
-				)
-			);
-		}
+			),
+			'application_context' => array(
+				'shipping_preference' => $shipping_preference
+			)
+		);
 
 		$result = $paypal->createOrder($order_info);
 			
@@ -318,11 +266,7 @@ class ControllerExtensionPaymentPayPal extends Controller {
 					$error['message'] = $this->language->get('error_timeout');
 				}
 				
-				if (isset($error['details'][0]['description'])) {
-					$error_messages[] = $error['details'][0]['description'];
-				} else {
-					$error_messages[] = $error['message'];
-				}
+				$error_messages[] = $error['message'];
 					
 				$this->model_extension_payment_paypal->log($error, $error['message']);
 			}
@@ -428,11 +372,7 @@ class ControllerExtensionPaymentPayPal extends Controller {
 						$error['message'] = $this->language->get('error_timeout');
 					}
 					
-					if (isset($error['details'][0]['description'])) {
-						$error_messages[] = $error['details'][0]['description'];
-					} else {
-						$error_messages[] = $error['message'];
-					}
+					$error_messages[] = $error['message'];
 					
 					$this->model_extension_payment_paypal->log($error, $error['message']);
 				}
@@ -459,7 +399,7 @@ class ControllerExtensionPaymentPayPal extends Controller {
 	
 	public function webhook() {
 		$this->load->model('extension/payment/paypal');
-				
+		
 		$webhook_data = json_decode(html_entity_decode(file_get_contents('php://input')), true);
 		
 		$this->model_extension_payment_paypal->log($webhook_data, 'Webhook');
@@ -513,7 +453,7 @@ class ControllerExtensionPaymentPayPal extends Controller {
 			
 			$this->load->model('checkout/order');
 
-			$this->model_checkout_order->addOrderHistory($order_id, $order_status_id, '', true);
+			$this->model_checkout_order->addOrderHistory($order_id, $order_status_id);
 		}
 	}
 }

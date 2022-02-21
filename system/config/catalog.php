@@ -8,7 +8,7 @@ $_['url_autostart']      = false;
 
 // Database
 $_['db_autostart']       = true;
-$_['db_engine']          = DB_DRIVER; // mpdo, mysqli or pgsql
+$_['db_engine']          = DB_DRIVER; // mpdo, mssql, mysql, mysqli or postgre
 $_['db_hostname']        = DB_HOSTNAME;
 $_['db_username']        = DB_USERNAME;
 $_['db_password']        = DB_PASSWORD;
@@ -26,7 +26,9 @@ $_['template_directory'] = '';
 $_['template_cache']     = true;
 
 // Autoload Libraries
-$_['library_autoload']   = array();
+$_['library_autoload']   = array(
+	'openbay'
+);
 
 // Actions
 $_['action_pre_action']  = array(
@@ -47,8 +49,9 @@ $_['action_event'] = array(
 		'event/language/after'
 	),	
 	'view/*/before' => array(
-		500  => 'event/theme',
+		500  => 'event/theme/override',
 		998  => 'event/language',
+		1000 => 'event/theme'
 	),
 	'language/*/after' => array(
 		'event/translation'

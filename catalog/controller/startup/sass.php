@@ -1,34 +1,27 @@
 <?php
 class ControllerStartupSass extends Controller {
 	public function index() {
-		$files = glob(DIR_APPLICATION . 'view/theme/' . $this->config->get('config_theme') . '/stylesheet/*.scss');
+		$file = DIR_APPLICATION . 'view/theme/' . $this->config->get('theme_directory') . '/stylesheet/bootstrap.css';
 
-		if ($files) {
-			foreach ($files as $file) {
-				// Get the filename
-				$filename = basename($file, '.scss');
+		if (!is_file($file) || (is_file(DIR_APPLICATION . 'view/theme/' . $this->config->get('theme_directory') . '/stylesheet/sass/_bootstrap.scss') && !$this->config->get('developer_sass'))) {
+			include_once(DIR_STORAGE . 'vendor/scss.inc.php');
+			
+			$scss = new Scssc();
+			$scss->setImportPaths(DIR_APPLICATION . 'view/theme/' . $this->config->get('theme_directory') . '/stylesheet/sass/');
 
-				$stylesheet = DIR_APPLICATION . 'view/theme/' . $this->config->get('config_theme') . '/stylesheet/' . $filename . '.css';
+			$output = $scss->compile('@import "_bootstrap.scss"');
 
-				if (!is_file($stylesheet) || !$this->config->get('developer_sass')) {
-					$scss = new \ScssPhp\ScssPhp\Compiler();
-					$scss->setImportPaths(DIR_APPLICATION . 'view/theme/' . $this->config->get('config_theme') . '/stylesheet/');
+			$handle = fopen($file, 'w');
 
-					$output = $scss->compile('@import "' . $filename . '.scss"');
+			flock($handle, LOCK_EX);
 
-					$handle = fopen($stylesheet, 'w');
+			fwrite($handle, $output);
 
-					flock($handle, LOCK_EX);
+			fflush($handle);
 
-					fwrite($handle, $output);
+			flock($handle, LOCK_UN);
 
-					fflush($handle);
-
-					flock($handle, LOCK_UN);
-
-					fclose($handle);
-				}
-			}
+			fclose($handle);
 		}
 	}
 }

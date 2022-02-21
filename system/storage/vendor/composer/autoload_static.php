@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
+class ComposerStaticInit4356ab4fdc794d105db4fa48b241456c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -17,17 +17,12 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
         array (
             'Wechat\\' => 7,
         ),
-        'T' => 
-        array (
-            'Twig\\' => 5,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Validator\\' => 28,
             'Symfony\\Component\\Translation\\' => 30,
-            'ScssPhp\\ScssPhp\\' => 16,
         ),
         'R' => 
         array (
@@ -56,10 +51,6 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
         array (
             0 => __DIR__ . '/..' . '/zoujingli/wechat-php-sdk/Wechat',
         ),
-        'Twig\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/twig/twig/src',
-        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -75,10 +66,6 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
-        ),
-        'ScssPhp\\ScssPhp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/scssphp/scssphp/src',
         ),
         'React\\Promise\\' => 
         array (
@@ -119,13 +106,6 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
     );
 
     public static $prefixesPsr0 = array (
-        'T' => 
-        array (
-            'Twig_' => 
-            array (
-                0 => __DIR__ . '/..' . '/twig/twig/lib',
-            ),
-        ),
         'D' => 
         array (
             'Divido' => 
@@ -142,13 +122,23 @@ class ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59
         ),
     );
 
+    public static $classMap = array (
+        'scss_formatter' => __DIR__ . '/..' . '/leafo/scssphp/scss.inc.php',
+        'scss_formatter_compressed' => __DIR__ . '/..' . '/leafo/scssphp/scss.inc.php',
+        'scss_formatter_nested' => __DIR__ . '/..' . '/leafo/scssphp/scss.inc.php',
+        'scss_parser' => __DIR__ . '/..' . '/leafo/scssphp/scss.inc.php',
+        'scss_server' => __DIR__ . '/..' . '/leafo/scssphp/scss.inc.php',
+        'scssc' => __DIR__ . '/..' . '/leafo/scssphp/scss.inc.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInita8cb75283b86ff94542c6f1327c4ce59::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4356ab4fdc794d105db4fa48b241456c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4356ab4fdc794d105db4fa48b241456c::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit4356ab4fdc794d105db4fa48b241456c::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4356ab4fdc794d105db4fa48b241456c::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4356ab4fdc794d105db4fa48b241456c::$classMap;
 
         }, null, ClassLoader::class);
     }

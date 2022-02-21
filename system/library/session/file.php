@@ -45,7 +45,7 @@ class File {
 		$file = DIR_SESSION . '/sess_' . basename($session_id);
 
 		if (is_file($file)) {
-			unlink($file);
+			unset($file);
 		}
 	}
 
