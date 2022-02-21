@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Admin-Set-Session-Cookie</id>
+	<version>OC V3.0.2.0</version>
+	<vqmver required="true">1.0</vqmver>
+	<author>www.skyshot.co.uk</author>
+	<file name="system/framework.php">
+		<operation>
+			<search><![CDATA[setcookie($config->get('session_name'), $session->getId(), ini_get('session.cookie_lifetime'), ini_get('session.cookie_path'), ini_get('session.cookie_domain'));]]></search>
+			<add position="replace"><![CDATA[setcookie($config->get('session_name'), $session->getId(), time() + 60 * 60 * 24 * 30, ini_get('session.cookie_path'), ini_get('session.cookie_domain')); 
+				]]></add>
+		</operation>
+	</file>
+</modification>
