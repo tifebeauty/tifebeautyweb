@@ -34,8 +34,10 @@ class ControllerCommonHeader extends Controller {
 		$data['scripts'] = $this->document->getScripts('header');
 		$data['lang'] = $this->language->get('code');
 		$data['direction'] = $this->language->get('direction');
+		
 
 		$data['name'] = $this->config->get('config_name');
+		$data['mytemplate'] = $this->config->get('theme_default_directory');
 
 		if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
 			$data['logo'] = $server . 'image/' . $this->config->get('config_logo');
@@ -76,6 +78,28 @@ class ControllerCommonHeader extends Controller {
 		$data['search'] = $this->load->controller('common/search');
 		$data['cart'] = $this->load->controller('common/cart');
 		$data['menu'] = $this->load->controller('common/menu');
+		
+		// For page specific css
+		if (isset($this->request->get['route'])) {
+			if (isset($this->request->get['product_id'])) {
+				$class = '-' . $this->request->get['product_id'];
+			} elseif (isset($this->request->get['path'])) {
+				$class = '-' . $this->request->get['path'];
+			} elseif (isset($this->request->get['manufacturer_id'])) {
+				$class = '-' . $this->request->get['manufacturer_id'];
+			} elseif (isset($this->request->get['information_id'])) {
+				$class = '-' . $this->request->get['information_id'];
+			} else {
+				$class = '';
+			}
+
+			$data['class'] = str_replace('/', '-', $this->request->get['route']) . $class;
+		} else {
+			$data['class'] = 'common-home';
+		}
+		
+		$data['column_left'] = $this->load->controller('common/column_left');
+		$data['column_right'] = $this->load->controller('common/column_right');	
 
 		return $this->load->view('common/header', $data);
 	}
