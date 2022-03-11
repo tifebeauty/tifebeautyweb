@@ -1,0 +1,61 @@
+
+<div id="testcms" class="blog-module latest blog">
+<div class="box-heading"><span class="heading_inner">{{ heading_title_latest }}</span></div>
+{% if posts %} 
+<div class="blog_grid_holder latest column-{{ columns }} carousel-{{ carousel }} m{{ module }}">
+{% for blog in posts %} 
+	
+        <div class="blog1">
+            <div class="img">
+                <div class="img_inner">
+            <a href="{{ blog.href }}"><img src="{{ blog.image }}" alt="{{ blog.title }}" title="{{ blog.title }}" /></a>
+                </div>
+            </div>
+            <div class="content-wrapper">
+            
+            <div class=" blog_date">
+            {% if author_status %}
+            <!--<span><i class="fa fa-user"></i><b class="text">{{ text_posted_by }}</b> <b class="hl">{{ blog.author }}</b></span>-->
+            {% endif %} 
+            {% if date_added_status %}
+            <span class="day_date"><!--<i class="fa fa-clock-o"><b class="text"></i>{{ text_posted_on }}</b>--> <b class="hl">{{ blog.date_added_full }}</b></span>
+            <span class="day_month"></span>
+            {% endif %} 
+            {% if page_view_status %}
+            <!--<span><i class="fa fa-eye"></i><b class="text">{{ text_read }}</b> <b class="hl">{{ blog.count_read }}</b></span>-->
+            {% endif %} 
+            {% if comments_count_status %}
+            <!--<span><i class="fa fa-comments"><b class="text"></i>{{ text_comments }}</b> <b class="hl">{{ blog.comment_total }}</b></span>-->
+            {% endif %} 
+            </div>
+            {% if blog.image and thumb %} 
+            
+            {% endif %} 
+            
+        
+        <div class="title"><a href="{{ blog.href }}">{{ blog.title }}</a></div>
+        {% if not characters == '0' %} 
+            <div class="desc">{{ blog.description }}</div>
+            <div class="comment">{{ blog.comment_total }} {{ text_comments }} {#{{ text_posted_by }} {{ blog.author }} #}</div>
+            <!--<p><a href="{{ blog.href }}">{{ text_read_more }} <!--<i class="fa fa-long-arrow-right"></i></a></p>-->
+            {% endif %} 
+    </div>
+    </div>
+	
+{% endfor %}
+</div>
+{% endif %}
+</div>
+
+{% if carousel %} 
+<script type="text/javascript">
+$(document).ready(function() {
+$('.blog_grid_holder.m{{ module }}').owlCarousel({
+itemsCustom: [ [0, 1], [767, 1], [979, {{ columns }}]],
+pagination: true,
+navigation:true,
+navigationText: ['<i class="fa prev"></i>', '<i class="fa next"></i>'],
+slideSpeed:500
+}); });
+</script>
+{% endif %} 

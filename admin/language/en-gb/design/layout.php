@@ -16,6 +16,11 @@ $_['text_content_bottom'] = 'Content Bottom';
 $_['text_column_left']    = 'Column Left';
 $_['text_column_right']   = 'Column Right';
 
+$_['text_footer_top']    = 'Footer Top';
+$_['text_footer_left']    = 'Footer Left';
+$_['text_footer_right']    = 'Footer Right';
+$_['text_footer_bottom']    = 'Footer Bottom';
+
 // Column
 $_['column_name']         = 'Layout Name';
 $_['column_action']       = 'Action';
