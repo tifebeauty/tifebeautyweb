@@ -30,7 +30,12 @@ class ControllerCommonFooter extends Controller {
 		$data['newsletter'] = $this->url->link('account/newsletter', '', true);
 
 		$data['powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));
-
+		
+		$data['footer_top'] = $this->load->controller('common/footer_top');
+		$data['footer_bottom'] = $this->load->controller('common/footer_bottom');
+		$data['footer_left'] = $this->load->controller('common/footer_left');
+		$data['footer_right'] = $this->load->controller('common/footer_right');
+		
 		// Whos Online
 		if ($this->config->get('config_customer_online')) {
 			$this->load->model('tool/online');
@@ -57,6 +62,11 @@ class ControllerCommonFooter extends Controller {
 		}
 
 		$data['scripts'] = $this->document->getScripts('footer');
+		
+		$data['footer_top'] = $this->load->controller('common/footer_top');
+		$data['footer_bottom'] = $this->load->controller('common/footer_bottom');
+		$data['footer_left'] = $this->load->controller('common/footer_left');
+		$data['footer_right'] = $this->load->controller('common/footer_right');
 		
 		return $this->load->view('common/footer', $data);
 	}
